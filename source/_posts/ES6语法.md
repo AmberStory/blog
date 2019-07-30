@@ -1,7 +1,7 @@
 ---
 title: ES6语法
 date: 2019-07-30 18:44:10
-tags:
+tags: ES6 JavaScript
 ---
 
 -------------------------
