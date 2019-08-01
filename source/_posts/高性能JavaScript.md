@@ -94,10 +94,24 @@ function innerHTMLLoop() {
 HTML集合是包含DOM节点引用的类数组对象，它不是真正的数值，但是提高了数值中的length属性，还能以数字索引的方式访问列表中的元素。
 思考以下代码：
 ```js
-var allDivs = document.getElementsByTagName('div');
+let allDivs = document.getElementsByTagName('div');
 for (let i=0; i<allDivs.length; i++) {
     document.body.appendChild(document.createElement('div'));
 }
 ```
 分析：
-按照上面“数据存储”这一章的讲解。
+根据前面“数据存储”章节的讲解，上面这段代码首先访问了三次`document`这个全局对象，可以优化为一个局部变量。
+然后我们来看循环中的`allDivs.length`。<b>实际上HTML集合一直与文档保持着连接，即能实时获取到文档的更新，每次文档一更新，HTML集合也会跟随改变。</b>这段代码看上去是把div的数量翻倍，每循环一次，body里添加一个新的div，但实际上这是一个死循环。因为`allDivs`这个集合事实与文档保持着连接，当文档中div的数量增加时，`allDivs.length`实际上也会一起增加，循环永远无法退出。
+
+上面的代码可以改写如下：
+```js
+let doc = document;     // 将全部对象保存在局部变量里
+let allDivs = doc.getElementsByTagName('div');
+let len = allDivs.length;   // 把集合的长度保存在局部变量里
+for (let i=0; i<len; i++) {
+    doc.body.appendChild(doc.createElement('div'));
+}
+```
+
+另外，变量数组比遍历集合快，可以将集合元素拷贝到数组中再进行遍历。
+## 重绘与重排
