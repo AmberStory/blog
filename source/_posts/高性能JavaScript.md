@@ -114,4 +114,19 @@ for (let i=0; i<len; i++) {
 ```
 
 另外，变量数组比遍历集合快，可以将集合元素拷贝到数组中再进行遍历。
+
+#### 快速选取DOM
+DOM提供了多种方法来读取文档的特定结构，我们最好为特定操作选择高效的api。比如选择子节点，childNodes不会区分元素节点和其他类型的节点，比如注释和文本节点等（HTML中的空白、换行其实是文本节点），如果我们只想访问元素节点，那么用children会更高效，不需要做额外的过滤处理。
+
+另一方面，使用CSS选择器也是定位节点的一种方式。推荐两个高效的原生DOM方法：querySelect()和querySelecterAll()。
+* querySelect() 方法返回文档中匹配指定 CSS 选择器的第一个元素。
+* querySelectorAll() 方法返回文档中匹配指定 CSS 选择器的所有元素，返回 NodeList 对象。这个方法返回的不是HTML集合，所以返回的节点不会对应实时的文档结构。
+
+思考题：找出页面中class="warning"或class="notice"的div元素。
+考虑一下代码：
+```js
+let errs = document.querySelectAll('div.warning, div.notice');
+```
+如果不使用querySelectAll，要获得同样的结果，会更加复杂。
+
 ## 重绘与重排
