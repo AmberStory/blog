@@ -91,12 +91,12 @@ function innerHTMLLoop() {
 ```
 改写后代码的运行速度能明显提升。
 #### HTML集合
-HTML集合是包含DOM节点引用的类数组对象，它不是真正的数值，但是提高了数值中的length属性，还能以数字索引的方式访问列表中的元素。
+HTML集合是包含DOM节点引用的类数组对象，它不是真正的数值，但是含有数组中的length属性，还能以数字索引的方式访问列表中的元素。
 思考以下代码：
 ```js
 let allDivs = document.getElementsByTagName('div');
 for (let i=0; i<allDivs.length; i++) {
-    document.body.appendChild(document.createElement('div'));
+  document.body.appendChild(document.createElement('div'));
 }
 ```
 分析：
