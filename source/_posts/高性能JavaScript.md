@@ -120,7 +120,7 @@ DOM提供了多种方法来读取文档的特定结构，我们最好为特定�
 
 另一方面，使用CSS选择器也是定位节点的一种方式。推荐两个高效的原生DOM方法：querySelect()和querySelecterAll()。
 * querySelect() 方法返回文档中匹配指定 CSS 选择器的第一个元素。
-* querySelectorAll() 方法返回文档中匹配指定 CSS 选择器的所有元素，返回 NodeList 对象。这个方法返回的不是HTML集合，所以返回的节点不会对应实时的文档结构。
+* querySelectorAll() 方法返回文档中匹配指定 CSS 选择器的所有元素，返回 NodeList 对象。此时的NodeList对象是静态的，所以返回的节点不会对应实时的文档结构。（注意：childNodes返回的NodeList对象是动态的,会随着文档结构的变化而变化）
 
 思考题：找出页面中class="warning"或class="notice"的div元素。
 考虑一下代码：
