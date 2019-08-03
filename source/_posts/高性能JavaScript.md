@@ -141,8 +141,67 @@ let errs = document.querySelectAll('div.warning, div.notice');
 * 浏览器窗口改变。
 * 出现滚动条（会引起整个页面的重排）。
 
-为了提高web性能，大多数浏览器会通过队列化修改并批量执行来优化重排过程，但是修改样式的过程中如果用户获取了布局信息，就会导致浏览器立即执行队列中的任务，即无法等到批量执行，然后触发重排以返回正确值，例如一下代码：
+为了提高web性能，大多数浏览器会通过队列化修改并批量执行来优化重排过程，但是修改样式的过程中如果用户获取了布局信息，就会导致浏览器立即执行队列中的任务，即无法等到批量执行，然后触发重排以返回正确值，例如以下代码：
 ```js
-
+let computed = window.getComputedStyle('document.body', '');
+let style = document.body.style;
+let tem = '';
+style.color = 'red';
+tem = computed.height;
+style.color = 'green';
+tem = computed.width;
+style.color = 'yellow';
+tem = computed.background;
 ```
+示例中，body元素改变了三次color值，且每改变一次都读取一个computed样式属性，虽然读取的属性都与改变的样式无关，但是浏览器却需要刷新渲染队列和重排，因为computed样式属性被请求了。
+一个更高效的方法是，不要在布局信息改变的时候查询它，以上代码改写如下：
+```js
+let computed = window.getComputedStyle('document.body', '');
+let style = document.body.style;
+let tem = '';
+style.color = 'red';
+style.color = 'green';
+style.color = 'yellow';
+tem = computed.height;
+tem = computed.width;
+tem = computed.background;
+```
+#### 批量处理样式
+* 通过cssText批量设置属性
+```js
+let el = document.getElementById('app');
+app.style.cssText = 'height: 100px; width: 200px; color: green;';
+```
+  cssText属性可以合并所有的样式改变一次处理，这样只会修改一次DOM。但是cssText属性会覆盖已有的样式信息，如果想要保留已有样式，可以把需要变更的样式附加在cssText字符串后面，上面的代码改写如下：
+```js
+  let el = document.getElementById('app');
+  app.style.cssText += '; height: 100px; width: 200px; color: green;';
+```
+  参考文档：https://cloud.tencent.com/developer/article/1057545
+  <br>
+* 通过改变DOM中class的值来改变样式
 
+#### 批量修改DOM
+当需要对DOM元素进行一系列操作时，可以通过以下步骤减少重排和重绘的次数：
+1. 使元素脱离文档流；
+2. 对其应用多重改变；
+3. 把元素带回文档中。
+<br>
+
+下面有三种基本方法可以使用。
+1. 隐藏元素，应用修改，然后重新显示；
+```js
+let el = document.getElememtById('app');
+el.style.display = 'none';
+···（执行修改DOM的操作，比如追加元素）
+el.style.display = 'block';
+```
+2. 使用文档片段；
+```js
+let fragment = document.createDocumentFragment();
+···（执行修改DOM的操作，比如追加元素）
+document.getElementById('app').appendChild(fragment);
+```
+  因为文档片段存在于内存中，并不在DOM树中，所以将子元素插入到文档片段时不会引起页面回流（对元素位置和几何上的计算）。因此，使用文档片段通常会带来更好的性能。
+  <br>
+3. 将原始元素拷贝到一个脱离文档的节点中，修改副本，完成后在替换成原始元素。
