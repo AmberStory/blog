@@ -80,5 +80,37 @@ arr.forEach(function (ele, index){
   console.log(result);
 })`
 
+## 对象拷贝
+#### 数组拷贝
+* 方法一
+```js
+arr1 = [1, 2];
+arr2 = [3, 4];
+arr3 = [...arr1, ...arr2];  //1,2,3,4
+```
+arr3改变不会影响arr1，arr2
 
+* 方法二
+```js
+arr1 = [1, 2];
+arr2 = [3, 4];
+arr3 = arr1.concat(arr2);  //1,2,3,4
+```
+arr3改变不会影响arr1，arr2
 
+#### 对象拷贝
+* 方法一
+```js
+obj1 = {a:1, b:2};
+obj2 = {c:3, d:4};
+obj3 = {...obj1, ...obj2};  //1,2,3,4
+```
+
+* 方法二
+```js
+obj1 = {a:1, b:2};
+obj2 = {c:3, d:4};
+obj3 = Object.assign({}, obj1, obj2);
+```
+注意assign实现的是浅拷贝，深拷贝、浅拷贝参考文档：
+https://juejin.im/post/59ac1c4ef265da248e75892b#heading-2
