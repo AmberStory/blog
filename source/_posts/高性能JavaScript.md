@@ -3,6 +3,7 @@ title: 高性能JavaScript
 date: 2019-07-04 23:09:46
 tags: JavaScript Web
 ---
+<p>《高性能JavaScript》学习笔记</p>
 ------
 ## JavaScript加载与执行
 > JavaScript代码的下载和执行经常会阻塞浏览器的其他进程，从而带来严重的用户体验问题，管理好JavaScript代码是提高web性能的关键。
@@ -207,6 +208,7 @@ document.getElementById('app').appendChild(fragment);
 3. 将原始元素拷贝到一个脱离文档的节点中，修改副本，完成后在替换成原始元素。
 
 ## 算法和流程控制
+> 改善循环性能的最佳方式是减少每次迭代的运算量和减少循环迭代次数。另外需要注意，避免使用for-in循环，因为该循环会同时搜索实例和原型属性，产生更多开销。除非需要遍历一个属性数量未知的对象。
 #### 减少迭代工作量
 * 比如遍历数组的时候，不要将数组的长度计算放在for循环中，可以将数组的长度作为局部变量存储起来，这样只用对数组长度进行一次属性查找。
 <br>
@@ -224,7 +226,7 @@ for(let i=0, len = arr.length; i<len; i++) {
 ```
   这样每次循环的时候只需判断控制条件的结果是否为true。随着迭代次数的增多，性能提升的趋势会更趋明显。
 
-#### 建设迭代次数
+#### 减少迭代次数
 即使在循环体内执行最简洁的代码，累计迭代上千次，运行速度也会慢下来，减少迭代次数能获得显著的性能提升。“达夫设备（Duff's Device）”是一种广为人知的限制循环迭代次数的模式。
 ```js
 function useDuffDevice(arr){
@@ -255,5 +257,35 @@ function useDuffDevice(arr){
 * 使用二分法的方式判断条件。
 
 #### Memoization优化技术
+Memoization是一种避免重复工作的方法，它缓存前一个计算的结果供后续使用，避免了重复计算，在递归算法中十分有用。
+下面是一段利用Memoization技术实现阶乘算法的示例：
+```js
+function memfactorial(n) {
+    if(!memfactorial.catch) {
+        memfactorial.catch = {
+            "0": 1,
+            "1": 1
+        }
+    }
+    if(!memfactorial.catch.hasOwnProperty(n)) {
+        memfactorial.catch[n] = n * memfactorial(n-1);
+    }
+    return memfactorial.catch[n];
+}
+```
+解析：在计算一个阶乘之前先检查这个缓存对象是否已经存在相应的计算结果，没有的话则认为是第一次计算，计算完成之后，结果被存储在缓存中供以后使用。比如计算完`memfactorial(5)`之后，再计算`memfactorial(4)`就可以直接从缓存中取，不需要重新计算。
 
-## 字符串和正在表达式
+## 字符串和正则表达式
+#### 字符串
+需要大量循环叠加字符串的时候，可以利用数组项合并的方法，比如：
+```js
+let str = 'string';
+let arr = [];
+let num = 5000;
+while(num--) {
+    arr[arr.length] = str;
+}
+let newStr = arr.join('');
+```
+
+#### 正则表达式
