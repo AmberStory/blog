@@ -12,6 +12,8 @@ tags: Linux
 `-b`参数可以用来指定cookie，也可以用过--cookie来指定cookie的值。
 `$ curl -b "token=PS-1YW8oJ65LIc" http://example.com`
 
+<!-- more -->
+
 ### 参考文档
 1. https://itbilu.com/linux/man/4yZ9qH_7X.html
 2. http://www.ruanyifeng.com/blog/2011/09/curl.html

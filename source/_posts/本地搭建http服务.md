@@ -13,7 +13,8 @@ tags: node server http
 执行完`npm install http-server -g`后，在html文件目录下执行`hp -o -p 8888`，其中`-o`表示启动服务后打开浏览器，`-p`表示设置端口号。（注意：http服务和server层启动的服务不能使用同一个端口号）
 npm包地址：https://www.npmjs.com/package/http-server
 
-<br>
+<!-- more -->
+
 2. http-server无法跨域请求node-server层接口
 
 <b>问题描述：</b>访问接口的时候浏览器报错。

@@ -30,6 +30,7 @@ function fail() {
 ```
 此时第一个then已经抛reject了，但是由于没有return，第二个then感知不到，所以把第一个then的返回值当普通函数处理，此时会进入第二个then的success函数里，但是我们预期的是希望进到fail函数里。
 
+<!-- more -->
 
 ### promise的return
 思考以下两组代码：

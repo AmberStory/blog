@@ -25,6 +25,8 @@ await最好放在try中，如果请求出错可以就进行catch捕获。
 }`
 报错，因为await用在了普通函数中。
 
+<!-- more -->
+
 ### for循环中使用await
 将上述例子修改如下：
 `async function(db) dbFun{
