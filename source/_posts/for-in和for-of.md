@@ -1,7 +1,10 @@
 ---
 title: for in和for of
 date: 2019-10-15 22:58:21
-tags: JavaScript es5 es6
+tags: 
+  - JavaScript
+  - es5
+  - es6
 ---
 ### for...in 
 for...in是es5标准，以任意顺序遍历一个对象的除Symbol以外的可枚举属性（循环将遍历对象本身的所有可枚举属性，以及对象从其构造函数原型中继承的属性（更接近原型链中对象的属性覆盖原型属性）)。如果只要考虑对象本身的属性，而不是它的原型，那么使用 getOwnPropertyNames() 或执行 hasOwnProperty() 来确定某属性是否是对象本身的属性（也能使用propertyIsEnumerable）。

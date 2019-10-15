@@ -1,7 +1,9 @@
 ---
 title: promise踩坑记
 date: 2019-09-02 08:58:57
-tags: ES6 promise
+tags: 
+  - ES6 
+  - promise
 ---
 
 
