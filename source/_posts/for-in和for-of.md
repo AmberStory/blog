@@ -22,7 +22,7 @@ for...in是es5标准，以任意顺序遍历一个对象的除Symbol以外的可
       console.log('own prop:', prop); // own prop: color
       continue;
     }
-    console.log('extend prop:', prop); // extend prop:a extend prop:b extend prop:c
+    console.log('extend prop:', prop); // extend prop:a   extend prop:b  extend prop:c
   }
 ```
 提示：for...in不应该用于迭代一个 Array，因为迭代的顺序是依赖于执行环境的，所以数组遍历不一定按次序访问元素。
