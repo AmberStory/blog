@@ -63,8 +63,9 @@ npm有`pre`和`host`两个钩子，一个是某个命令之前执行，一个是
 npm会设置很多环境变量，可以通过`npm run env`查看，其中package.json中设置的字段，都会被自动添加上npm_package_的前缀，比如scripts里的build字段就会被编译成`npm_package_scripts_build`。npm的所有环境变量可以通过`npm run env`来查看。
 
 **注意：**
-* 如果命令上的“:”也会被替换成“_”；
-* 如果对象的值是数组，则编译之后是按下标作为key。比如`{"pretest": ["a","b"]}`会被编译成`"npm_package_pretest_0": "a",`和`"npm_package_pretest_1": "b"`。
+* 可以在命令语句中定义变量，形式是“名称=值”，比如执行语句中加入“NODE_ENV=true”会成为环境变量，“MOCK=true”也是环境变量，都可以通过process.env来获取；
+* 如果命令上有“:”，也会被替换成“_”；
+* 如果对象的值是数组，则编译之后是按下标作为key。比如`{"pretest": ["a","b"]}`会被编译成`"npm_package_pretest_0": "a",`和`"npm_package_pretest_1": "b"`；
 * `npm_lifecycle_event`字段用于标识当前处于哪一个阶段（所谓的生命周期），比如执行prebuild的时候，`npm_lifecycle_event`的值为prebuild，我们可以通过`process.env.npm_lifecycle_event`取值。
 
 ## 进阶：commander
