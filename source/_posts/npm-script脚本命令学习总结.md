@@ -85,3 +85,4 @@ npm会设置很多环境变量，可以通过`npm run env`查看，其中package
 * http://www.ruanyifeng.com/blog/2016/10/npm_scripts.html
 * https://juejin.im/post/5cb3f1ef5188256d917874ff
 * https://www.npmjs.com/package/commander
+* https://juejin.im/post/5c8be466f265da2dc849af70
