@@ -21,7 +21,6 @@ tags: JavaScript Web
     （注意：defer属性仅当src属性声明时才生效-------------测一测）
     2. 动态创建脚本元素
     动态创建`<script>`标签的方法，无论何时启动下载，文件的下载和执行都不会阻塞页面其他进程，但是动态加载的文件会按照从服务器返回的顺序下载和执行脚本，也就是说不一定能按照指定的顺序执行。因为浏览器对动态插入的script默认设置了async（各个浏览器可能不同），而async的执行是没有顺序的，所以我们把script标签的async属性改成false就可以了。
-    （参考：http://echizen.github.io/tech/2017/04-22-script-exec）
     3. 使用XML对象下载JavaScript代码。
     
 ## 数据存储
@@ -50,45 +49,84 @@ function setStyle() {
 * <b>访问字面量和局部变量的速度比访问数组和对象的速度快。</b>
 尽量减少使用嵌套成员，嵌套的越少，越影响性能，比如执行window.location.href总比location.href要慢。我们可以将对象成员、数组元素等保存在局部变量中使用，例如：
 ```js
-function getAttribute() {
-    let doc = document;
-    let name = doc.getElementById('name');
-    let age = doc.getElementById('age');
-    let sex = doc.getElementById('sex');
-}
-```
-    改写如下：
-    ```js
-    function getAttribute() {
-        let doc = document;
-        let getId = doc.getElementById; // 将doc.getElementById对象存储在局部变量中，减少读取对象成员的次数
-        let name = getId('name');
-        let age = getId('age');
-        let sex = getId('sex');
+const obj = {
+    student: {
+      age: 26
     }
-    ```
-
+  }
+  let age = 0;
+  const startTime = new Date().getTime();
+  for(let i = 0; i< 100000000; i++) {
+    age = obj.student.age;  // 访问字面量和局部变量的速度比访问数组和对象的速度快。
+  }
+  const endTime = new Date().getTime();
+  console.log('costTime:', endTime-startTime);
+```
+改写如下：
+```js
+  const obj = {
+  student: {
+      age: 26
+    }
+  }
+  let age = 0;
+  const abcde = obj.student.age;
+  const startTime = new Date().getTime();
+  for(let i = 0; i< 100000000; i++) {
+    age = abcde;  // 访问字面量和局部变量的速度比访问数组和对象的速度快。
+  }
+  const endTime = new Date().getTime();
+  console.log('costTime:', endTime-startTime);
+```
+<br>
+* 减少计算的次数，计算次数越少，访问速度越快
+```js
+  let arr = [];
+  arr.length = 100000000;
+  const startTime = new Date().getTime();
+  for(let i=0; i<arr.length;) { // 每次循环会重复计算数组的长度
+    i++;
+  }
+  const endTime = new Date().getTime();
+  console.log('costTime:', endTime-startTime);
+```
+改写如下：
+```js
+  let arr = [];
+  arr.length = 100000000;
+  const len = arr.length; // 计算量越小 / 越少，访问速度越快。
+  const startTime = new Date().getTime();
+  for(let i=0; i<len;) {
+    i++;
+  }
+  const endTime = new Date().getTime();
+  console.log('costTime:', endTime-startTime);
+```
 ## DOM编程
 > 有一个比喻，ECMAScript和DOM好比两座岛屿，他们之间用收费桥梁连接，ECMAScript每次访问DOM，都要途径这座桥，并缴纳过桥费，访问DOM次数越多，费用就越高。所以减少DOM操作次数，能有效提高页面的响应速度。
 
-#### 操作DOM修改
+#### 减少DOM操作次数
 思考以下代码：
 ```js
-function innerHTMLLoop() {
-    for(let count=0; count<1000; count++) {
-        document.getElementById('app').innerHTML = document.getElementById('app').innerHTML + '1';
-    }
+const doc = document;
+const startTime = new Date().getTime();
+for(let count=0; count<200; count++) {
+  doc.body.innerHTML += '1';  // 反复访问DOM元素
 }
+const endTime = new Date().getTime();
+console.log('costTime:', endTime-startTime);
 ```
 每循环一次，该DOM元素都会被访问两次，十分影响性能，换一下方式，用局部变量存储的方式改下，如下：
 ```js
-function innerHTMLLoop() {
-    let content = '';
-    for(let count=0; count<1000; count++) {
-        content += '1';
-    }
-    document.getElementById('app').innerHTML = document.getElementById('app').innerHTML + content;
+let content = '';
+const doc = document;
+const startTime = new Date().getTime();
+for(let count=0; count<200; count++) {
+  content += '1';
 }
+doc.body.innerHTML += content;
+const endTime = new Date().getTime();
+console.log('costTime:', endTime-startTime);
 ```
 改写后代码的运行速度能明显提升。
 #### HTML集合
@@ -121,10 +159,10 @@ DOM提供了多种方法来读取文档的特定结构，我们最好为特定�
 
 另一方面，使用CSS选择器也是定位节点的一种方式。推荐两个高效的原生DOM方法：querySelect()和querySelecterAll()。
 * querySelect() 方法返回文档中匹配指定 CSS 选择器的第一个元素。
-* querySelectorAll() 方法返回文档中匹配指定 CSS 选择器的所有元素，返回 NodeList 对象。此时的NodeList对象是静态的，所以返回的节点不会对应实时的文档结构。（注意：childNodes返回的NodeList对象是动态的,会随着文档结构的变化而变化）但是如果只是单纯的根据tag name来查找元素，建设使用getElementsByTagName()方法，因为getElementsByTagName()方法返回的HTML集合是动态的，动态集合比静态更快能够更快的被创建和返回。（参考：https://blog.csdn.net/renfufei/article/details/41088521）
+* querySelectorAll() 方法返回文档中匹配指定 CSS 选择器的所有元素，返回 NodeList 对象。此时的NodeList对象是静态的，所以返回的节点不会对应实时的文档结构。（注意：childNodes返回的NodeList对象是动态的,会随着文档结构的变化而变化）但是如果只是单纯的根据tag name来查找元素，建议使用getElementsByTagName()方法，因为getElementsByTagName()方法返回的HTML集合是动态的，动态集合比静态集合能够更快的被创建和返回。
 
 思考题：找出页面中class="warning"或class="notice"的div元素。
-考虑一下代码：
+考虑以下代码：
 ```js
 let errs = document.querySelectAll('div.warning, div.notice');
 ```
