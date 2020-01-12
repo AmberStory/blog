@@ -176,7 +176,7 @@ let errs = document.querySelectAll('div.warning, div.notice');
 * 改变普通文档流中元素的位置。
 * 改变元素尺寸（包括：外边距、内边距、边框宽度、厚度、高度等属性）。
 * 内容改变，例如：文本改变、图片改变（尺寸不一样的图片）。
-* 页面渲染器初始。
+* 页面渲染器初始化。
 * 浏览器窗口改变。
 * 出现滚动条（会引起整个页面的重排）。
 
@@ -208,12 +208,12 @@ tem = computed.background;
 #### 批量处理样式
 * 通过cssText批量设置属性
 ```js
-let el = document.getElementById('app');
+let app = document.getElementById('app');
 app.style.cssText = 'height: 100px; width: 200px; color: green;';
 ```
   cssText属性可以合并所有的样式改变一次处理，这样只会修改一次DOM。但是cssText属性会覆盖已有的样式信息，如果想要保留已有样式，可以把需要变更的样式附加在cssText字符串后面，上面的代码改写如下：
 ```js
-  let el = document.getElementById('app');
+  let app = document.getElementById('app');
   app.style.cssText += '; height: 100px; width: 200px; color: green;';
 ```
   参考文档：https://cloud.tencent.com/developer/article/1057545
@@ -351,12 +351,12 @@ let newStr = arr.join('');
 
 * 提高正则表达式效率的方法
 1. 让匹配失败的更快，因为匹配过程大部分都是失败的情况，只有失败的速度更快，才能更快得出结论。
-2. 减少分支数量，缩小分支范围；
+2.减少分支数量，缩小分支范围；
 ```js
   cat|bat => [cb]at
   hello|happy => h(ello|appy)
 ```
-3. 把正则表达式赋值给变量并重用
+3.把正则表达式赋值给变量并重用
 ```js
   // 每次循环浏览器需要重新对正则表达式进行编译
   while(/reg1/.test(str1)) {
@@ -373,7 +373,7 @@ let newStr = arr.join('');
     ...
   }
 ```
-4. 将复杂的正则表达式拆分成简单的片段
+4.将复杂的正则表达式拆分成简单的片段
 ```js
   // 方式一
   str.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -397,5 +397,13 @@ let newStr = arr.join('');
       end--;
     }
     return str.slice(0, end+1);
+  }
+```
+
+```js
+  let str = 'abcdy';
+  const reg = /abcd[abc]/;
+  while(reg.test(str)) {
+    ...
   }
 ```
