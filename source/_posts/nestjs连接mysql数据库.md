@@ -40,9 +40,16 @@ FLUSH PRIVILEGES; #刷新权限
 # mysql查询命令（命令行后面的分号不能省）
 * select user from mysql.user;  // 查询数据库用户名
 
+* use <database名>; // 查看所有库
+
+* show tables;  // 查看所有表
+
+* desc <表名>;  // 查看表结构
+
 * show databases;   // 查看所有数据库库名
 
 * update user set user ='Amber' where user =’root’;   // 修改数据库用户名
+
 
 
 
