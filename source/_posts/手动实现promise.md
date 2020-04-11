@@ -1,7 +1,7 @@
 ---
 title: 手动实现promise
 date: 2020-04-06 14:58:11
-tags: Promise JS
+tags: Promise JavaScript
 ---
 本文是对promise-polyfill源码的学习理解，源码下载地址：https://github.com/taylorhakes/promise-polyfill
 
@@ -136,7 +136,7 @@ function handle(self, deferred) {
     return;
   }
   self._handled = true;
-  // 这里的_immediateFn是借用setTimeout函数进行异步操作
+  // 这里的_immediateFn是借助setTimeout函数实现异步操作，属于宏认为，实际浏览器中的promise是通过微任务实现异步处理的
   Promise._immediateFn(function() {
     var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
